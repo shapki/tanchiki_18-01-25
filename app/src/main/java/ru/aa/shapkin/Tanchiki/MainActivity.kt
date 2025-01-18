@@ -34,21 +34,21 @@ class MainActivity : AppCompatActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
-    private fun move (direction: Direction){
-        when(direction){
-            UP->{
+    private fun move (direction: Direction) {
+        when (direction) {
+            UP -> {
                 binding.myTank.rotation = 0f
                 (binding.myTank.layoutParams as FrameLayout.LayoutParams).topMargin += -50
             }
-            DOWN->{
+            DOWN -> {
                 binding.myTank.rotation = 180f
                 (binding.myTank.layoutParams as FrameLayout.LayoutParams).topMargin += -50
             }
-            LEFT->{
+            LEFT -> {
                 binding.myTank.rotation = 270f
                 (binding.myTank.layoutParams as FrameLayout.LayoutParams).topMargin += -50
             }
-            RIGHT->{
+            RIGHT -> {
                 binding.myTank.rotation = 90f
                 (binding.myTank.layoutParams as FrameLayout.LayoutParams).topMargin += -50
             }
