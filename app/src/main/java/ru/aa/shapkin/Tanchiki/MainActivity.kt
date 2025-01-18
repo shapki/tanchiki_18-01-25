@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
-    private fun move (direction: Direction) {
+    private fun move(direction: Direction) {
         when (direction) {
             UP -> {
                 binding.myTank.rotation = 0f
