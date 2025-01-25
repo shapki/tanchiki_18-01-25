@@ -1,4 +1,4 @@
-package ru.aa.shapkin.Tanchiki
+package ru.aa.shapkin.Tanchiki.enums
 
 enum class Direction {
     UP,
