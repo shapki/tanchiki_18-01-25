@@ -87,11 +87,35 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         when (keyCode) {
-            KEYCODE_DPAD_UP -> tankDrawer.move(binding.myTank, UP, elementsDrawer.elementsOnContainer)
-            KEYCODE_DPAD_DOWN -> tankDrawer.move(binding.myTank, DOWN, elementsDrawer.elementsOnContainer)
-            KEYCODE_DPAD_LEFT -> tankDrawer.move(binding.myTank, LEFT, elementsDrawer.elementsOnContainer)
-            KEYCODE_DPAD_RIGHT -> tankDrawer.move(binding.myTank, RIGHT, elementsDrawer.elementsOnContainer)
-            KEYCODE_SPACE -> bulletDrawer.makeBulletMove(binding.myTank, tankDrawer.currentDirection)
+            KEYCODE_DPAD_UP -> tankDrawer.move(
+                binding.myTank,
+                UP,
+                elementsDrawer.elementsOnContainer
+            )
+
+            KEYCODE_DPAD_DOWN -> tankDrawer.move(
+                binding.myTank,
+                DOWN,
+                elementsDrawer.elementsOnContainer
+            )
+
+            KEYCODE_DPAD_LEFT -> tankDrawer.move(
+                binding.myTank,
+                LEFT,
+                elementsDrawer.elementsOnContainer
+            )
+
+            KEYCODE_DPAD_RIGHT -> tankDrawer.move(
+                binding.myTank,
+                RIGHT,
+                elementsDrawer.elementsOnContainer
+            )
+
+            KEYCODE_SPACE -> bulletDrawer.makeBulletMove(
+                binding.myTank,
+                tankDrawer.currentDirection,
+                elementsDrawer.elementsOnContainer
+            )
         }
         return super.onKeyDown(keyCode, event)
     }

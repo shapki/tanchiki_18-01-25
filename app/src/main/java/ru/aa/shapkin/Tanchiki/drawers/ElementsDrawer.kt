@@ -12,6 +12,7 @@ import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
+import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
 
 class ElementsDrawer(val container: FrameLayout) {
     var currentMaterial = Material.EMPTY
@@ -29,7 +30,7 @@ class ElementsDrawer(val container: FrameLayout) {
     }
 
     private fun drawOrReplaceView(coordinate: Coordinate) {
-        val viewOnCoordinate = getElementByCoordinates(coordinate)
+        val viewOnCoordinate = getElementByCoordinates(coordinate, elementsOnContainer)
         if (viewOnCoordinate == null) {
             drawView(coordinate)
             return
@@ -45,7 +46,7 @@ class ElementsDrawer(val container: FrameLayout) {
     }
 
     private fun eraseView(coordinate: Coordinate) {
-        val elementOnCoordinate = getElementByCoordinates(coordinate)
+        val elementOnCoordinate = getElementByCoordinates(coordinate, elementsOnContainer)
         if (elementOnCoordinate != null) {
             val erasingView = container.findViewById<View>(elementOnCoordinate.viewId)
             container.removeView(erasingView)
@@ -73,6 +74,4 @@ class ElementsDrawer(val container: FrameLayout) {
         container.addView(view)
         elementsOnContainer.add(Element(viewId, currentMaterial, coordinate))
     }
-
-    private fun getElementByCoordinates(coordinate: Coordinate) = elementsOnContainer.firstOrNull { it.coordinate == coordinate }
 }

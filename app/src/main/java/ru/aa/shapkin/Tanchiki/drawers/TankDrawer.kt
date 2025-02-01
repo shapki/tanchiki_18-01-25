@@ -8,6 +8,7 @@ import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
+import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
 
 class TankDrawer(val container: FrameLayout) {
     var currentDirection = Direction.UP
@@ -57,13 +58,6 @@ class TankDrawer(val container: FrameLayout) {
         return true
     }
 
-/*    private fun checkTankCanMoveThroughBorder(coordinate: Coordinate, myTank: View): Boolean {
-        return coordinate.top >= 0 &&
-                coordinate.top + myTank.height <= binding.container.height &&
-                container.left >= 0 &&
-                container.left + myTank.width <= binding.container.width
-    } */
-
     private fun getTankCoordinates(topLeftCoordinate: Coordinate): List<Coordinate> {
         val coordinateList = mutableListOf<Coordinate>()
         coordinateList.add(topLeftCoordinate)
@@ -72,6 +66,4 @@ class TankDrawer(val container: FrameLayout) {
         coordinateList.add(Coordinate(topLeftCoordinate.top + CELL_SIZE, topLeftCoordinate.left + CELL_SIZE))
         return coordinateList
     }
-
-    private fun getElementByCoordinates(coordinate: Coordinate, elementsOnContainer: List<Element>) = elementsOnContainer.firstOrNull { it.coordinate == coordinate }
 }
