@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity() {
         BulletDrawer(binding.container)
     }
 
+    private val levelStorage by lazy {
+        LevelStorage(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -57,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             elementsDrawer.onTouchContainer(event.x, event.y)
             return@setOnTouchListener true
         }
+        elementsDrawer.drawElementsList(levelStorage.loadLevel())
     }
 
     private fun switchEditMode() {
@@ -79,6 +84,11 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_settings -> {
                 switchEditMode()
+                return true
+            }
+
+            R.id.menu_save -> {
+                levelStorage.saveLevel(elementsDrawer.elementsOnContainer)
                 return true
             }
 
