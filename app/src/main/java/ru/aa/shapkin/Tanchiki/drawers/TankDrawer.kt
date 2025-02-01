@@ -7,6 +7,7 @@ import ru.aa.shapkin.Tanchiki.binding
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
+import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
 
 class TankDrawer(val container: FrameLayout) {
     var currentDirection = Direction.UP
@@ -34,9 +35,8 @@ class TankDrawer(val container: FrameLayout) {
             }
         }
         val nextCoordinate = Coordinate(layoutParams.topMargin, layoutParams.leftMargin)
-        if (checkTankCanMoveThroughBorder(
-                nextCoordinate,
-                myTank
+        if (myTank.checkViewCanMoveThroughBorder(
+                nextCoordinate
             ) && checkTankCanMoveThroughMaterial(nextCoordinate, elementsOnContainer)
         ) {
             binding.container.removeView(myTank)
@@ -57,12 +57,12 @@ class TankDrawer(val container: FrameLayout) {
         return true
     }
 
-    private fun checkTankCanMoveThroughBorder(coordinate: Coordinate, myTank: View): Boolean {
+/*    private fun checkTankCanMoveThroughBorder(coordinate: Coordinate, myTank: View): Boolean {
         return coordinate.top >= 0 &&
                 coordinate.top + myTank.height <= binding.container.height &&
                 container.left >= 0 &&
                 container.left + myTank.width <= binding.container.width
-    }
+    } */
 
     private fun getTankCoordinates(topLeftCoordinate: Coordinate): List<Coordinate> {
         val coordinateList = mutableListOf<Coordinate>()

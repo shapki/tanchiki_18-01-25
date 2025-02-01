@@ -8,9 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
-import androidx.core.view.marginLeft
-import androidx.core.view.marginTop
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
@@ -20,7 +17,6 @@ import ru.aa.shapkin.Tanchiki.drawers.BulletDrawer
 import ru.aa.shapkin.Tanchiki.drawers.ElementsDrawer
 import ru.aa.shapkin.Tanchiki.drawers.GridDrawer
 import ru.aa.shapkin.Tanchiki.drawers.TankDrawer
-import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
 
 const val CELL_SIZE = 50
@@ -95,7 +91,7 @@ class MainActivity : AppCompatActivity() {
             KEYCODE_DPAD_DOWN -> tankDrawer.move(binding.myTank, DOWN, elementsDrawer.elementsOnContainer)
             KEYCODE_DPAD_LEFT -> tankDrawer.move(binding.myTank, LEFT, elementsDrawer.elementsOnContainer)
             KEYCODE_DPAD_RIGHT -> tankDrawer.move(binding.myTank, RIGHT, elementsDrawer.elementsOnContainer)
-            KEYCODE_SPACE -> bulletDrawer.drawBullet(binding.myTank, tankDrawer.currentDirection)
+            KEYCODE_SPACE -> bulletDrawer.makeBulletMove(binding.myTank, tankDrawer.currentDirection)
         }
         return super.onKeyDown(keyCode, event)
     }

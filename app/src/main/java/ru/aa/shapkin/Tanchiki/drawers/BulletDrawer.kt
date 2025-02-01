@@ -1,5 +1,6 @@
 package ru.aa.shapkin.Tanchiki.drawers
 
+import android.app.Activity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -7,13 +8,36 @@ import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.R
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.models.Coordinate
+import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
 
 private const val BULLET_WIDTH = 15
 private const val BULLET_HEIGHT = 15
 
 class BulletDrawer(val container: FrameLayout) {
-    fun drawBullet(myTank: View, currentDirection: Direction) {
-        val bullet = ImageView(container.context)
+    fun makeBulletMove(myTank: View, currentDirection: Direction) {
+        Thread(Runnable {
+            val bullet = createBullet(myTank, currentDirection)
+            while (bullet.checkViewCanMoveThroughBorder(Coordinate(bullet.top, bullet.left))) {
+                when (currentDirection) {
+                    Direction.UP -> (bullet.layoutParams as FrameLayout.LayoutParams).topMargin -= BULLET_HEIGHT
+                    Direction.DOWN -> (bullet.layoutParams as FrameLayout.LayoutParams).topMargin -= BULLET_HEIGHT
+                    Direction.LEFT -> (bullet.layoutParams as FrameLayout.LayoutParams).leftMargin -= BULLET_HEIGHT
+                    Direction.RIGHT -> (bullet.layoutParams as FrameLayout.LayoutParams).leftMargin -= BULLET_HEIGHT
+                }
+                Thread.sleep(30)
+                (container.context as Activity).runOnUiThread {
+                    container.removeView(bullet)
+                    container.addView(bullet)
+                }
+            }
+            (container.context as Activity).runOnUiThread {
+                container.removeView(bullet)
+            }
+        }).start()
+    }
+
+    private fun createBullet(myTank: View, currentDirection: Direction): ImageView {
+        return ImageView(container.context)
             .apply {
                 this.setImageResource(R.drawable.bullet)
                 this.layoutParams = FrameLayout.LayoutParams(BULLET_WIDTH, BULLET_HEIGHT)
@@ -22,7 +46,6 @@ class BulletDrawer(val container: FrameLayout) {
                 (this.layoutParams as FrameLayout.LayoutParams).leftMargin = bulletCoordinate.left
                 this.rotation = currentDirection.rotation
             }
-        container.addView(bullet)
     }
 
     private fun getBulletCoordinates(
