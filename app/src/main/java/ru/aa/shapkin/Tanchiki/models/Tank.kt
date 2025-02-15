@@ -9,8 +9,11 @@ import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
 import ru.aa.shapkin.Tanchiki.enums.Direction.RIGHT
+import ru.aa.shapkin.Tanchiki.enums.Material
 import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
 import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
+import ru.aa.shapkin.Tanchiki.utils.runOnUiThread
+import kotlin.random.Random
 
 class Tank(
     val element: Element,
@@ -29,13 +32,27 @@ class Tank(
         if (view.checkViewCanMoveThroughBorder(nextCoordinate)
             && element.checkTankCanMoveThroughMaterial(nextCoordinate, elementsOnContainer)
         ) {
-            binding.container.removeView(view)
-            binding.container.addView(view)
+            emulateViewMoving(container, view)
             element.coordinate = nextCoordinate
         } else {
             element.coordinate = currentCoordinate
             (view.layoutParams as FrameLayout.LayoutParams).topMargin = currentCoordinate.top
             (view.layoutParams as FrameLayout.LayoutParams).leftMargin = currentCoordinate.left
+            changeDirectionForEnemyTank()
+        }
+    }
+
+    private fun changeDirectionForEnemyTank() {
+        if (element.material == Material.ENEMY_TANK) {
+            val randomDirection = ru.aa.shapkin.Tanchiki.enums.Direction.values()[Random.nextInt(ru.aa.shapkin.Tanchiki.enums.Direction.values().size)]
+            this.direction = randomDirection
+        }
+    }
+
+    private fun emulateViewMoving(container: FrameLayout, view: View) {
+        container.runOnUiThread {
+            binding.container.removeView(view)
+            binding.container.addView(view, 0)
         }
     }
 
