@@ -83,4 +83,13 @@ enum class Material(
         CELLS_TANKS_SIZE,
         R.drawable.enemy_tank
     ),
+    PLAYER_TANK(
+        false,
+        false,
+        true,
+        0,
+        CELLS_TANKS_SIZE,
+        CELLS_TANKS_SIZE,
+        R.drawable.tank
+    ),
 }
