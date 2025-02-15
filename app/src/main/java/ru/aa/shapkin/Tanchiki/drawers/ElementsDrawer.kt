@@ -7,6 +7,7 @@ import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Material
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
+import ru.aa.shapkin.Tanchiki.utils.drawElement
 import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
 
 const val CELLS_SIMPLE_ELEMENT = 1
@@ -98,25 +99,13 @@ class ElementsDrawer(val container: FrameLayout) {
 
     private fun drawView(coordinate: Coordinate) {
         removeUnwantedInstances()
-        val view = ImageView(container.context)
-        val layoutParams = FrameLayout.LayoutParams(
-            currentMaterial.width * CELL_SIZE,
-            currentMaterial.height * CELL_SIZE
-        )
-        view.setImageResource(currentMaterial.image)
-        layoutParams.topMargin = coordinate.top
-        layoutParams.leftMargin = coordinate.left
         val element = Element(
             material = currentMaterial,
             coordinate = coordinate,
             width = currentMaterial.width,
             height = currentMaterial.height
         )
-        val viewId = View.generateViewId()
-        view.id = viewId
-        view.layoutParams = layoutParams
-        view.scaleType = ImageView.ScaleType.FIT_XY
-        container.addView(view)
+        element.drawElement(container)
         elementsOnContainer.add(element)
     }
 }
