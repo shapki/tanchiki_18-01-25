@@ -12,10 +12,7 @@ import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
 import ru.aa.shapkin.Tanchiki.enums.Direction.RIGHT
 import ru.aa.shapkin.Tanchiki.databinding.ActivityMainBinding
-import ru.aa.shapkin.Tanchiki.drawers.BulletDrawer
-import ru.aa.shapkin.Tanchiki.drawers.ElementsDrawer
-import ru.aa.shapkin.Tanchiki.drawers.GridDrawer
-import ru.aa.shapkin.Tanchiki.drawers.TankDrawer
+import ru.aa.shapkin.Tanchiki.drawers.*
 import ru.aa.shapkin.Tanchiki.enums.Material
 
 const val CELL_SIZE = 50
@@ -44,6 +41,10 @@ class MainActivity : AppCompatActivity() {
         LevelStorage(this)
     }
 
+    private val enemyDrawer by lazy {
+        EnemyDrawer(binding.container)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -56,17 +57,12 @@ class MainActivity : AppCompatActivity() {
         binding.editorConcrete.setOnClickListener { elementsDrawer.currentMaterial = Material.CONCRETE }
         binding.editorGrass.setOnClickListener { elementsDrawer.currentMaterial = Material.GRASS }
         binding.editorEagle.setOnClickListener { elementsDrawer.currentMaterial = Material.EAGLE }
-        binding.editorEnemyRespawn.setOnClickListener {
-            elementsDrawer.currentMaterial = Material.ENEMY_TANK_RESPAWN
-        }
-        binding.editorPlayerRespawn.setOnClickListener {
-            elementsDrawer.currentMaterial = Material.PLAYER_TANK_RESPAWN
-        }
         binding.container.setOnTouchListener() { _, event ->
             elementsDrawer.onTouchContainer(event.x, event.y)
             return@setOnTouchListener true
         }
         elementsDrawer.drawElementsList(levelStorage.loadLevel())
+
         hideSettings()
     }
 
@@ -82,13 +78,11 @@ class MainActivity : AppCompatActivity() {
     private fun showSettings() {
         gridDrawer.drawGrid()
         binding.materialsContainer.visibility = VISIBLE
-        elementsDrawer.changeElementsVisiblity(true)
     }
 
     private fun hideSettings() {
         gridDrawer.removeGrid()
         binding.materialsContainer.visibility = GONE
-        elementsDrawer.changeElementsVisiblity(false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
