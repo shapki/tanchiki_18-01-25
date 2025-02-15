@@ -6,8 +6,7 @@ import android.view.KeyEvent
 import android.view.KeyEvent.*
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
@@ -68,17 +67,28 @@ class MainActivity : AppCompatActivity() {
             return@setOnTouchListener true
         }
         elementsDrawer.drawElementsList(levelStorage.loadLevel())
+        hideSettings()
     }
 
     private fun switchEditMode() {
         if (editMode) {
-            gridDrawer.removeGrid()
-            binding.materialsContainer.visibility = INVISIBLE
+            showSettings()
         } else {
-            gridDrawer.drawGrid()
-            binding.materialsContainer.visibility = VISIBLE
+            hideSettings()
         }
         editMode = !editMode
+    }
+
+    private fun showSettings() {
+        gridDrawer.drawGrid()
+        binding.materialsContainer.visibility = VISIBLE
+        elementsDrawer.changeElementsVisiblity(true)
+    }
+
+    private fun hideSettings() {
+        gridDrawer.removeGrid()
+        binding.materialsContainer.visibility = GONE
+        elementsDrawer.changeElementsVisiblity(false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

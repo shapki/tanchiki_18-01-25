@@ -28,6 +28,21 @@ class ElementsDrawer(val container: FrameLayout) {
         }
     }
 
+    fun changeElementsVisiblity(editMode: Boolean) {
+        elementsOnContainer
+            .filter { it.material.visibleInEditableMode }
+            .forEach { setViewIdVisiblity(it.viewId, editMode) }
+    }
+
+    private fun setViewIdVisiblity(viewId: Int, editMode: Boolean) {
+        val view = container.findViewById<View>(viewId)
+        if (editMode) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+
     private fun drawOrReplaceView(coordinate: Coordinate) {
         val viewOnCoordinate = getElementByCoordinates(coordinate, elementsOnContainer)
         if (viewOnCoordinate == null) {
