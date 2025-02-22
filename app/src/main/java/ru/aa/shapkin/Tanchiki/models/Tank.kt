@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.FrameLayout
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.binding
+import ru.aa.shapkin.Tanchiki.drawers.BulletDrawer
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
@@ -15,9 +16,10 @@ import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
 import ru.aa.shapkin.Tanchiki.utils.runOnUiThread
 import kotlin.random.Random
 
-class Tank(
+class Tank constructor(
     val element: Element,
-    var direction: ru.aa.shapkin.Tanchiki.enums.Direction
+    var direction: ru.aa.shapkin.Tanchiki.enums.Direction,
+    val bulletDrawer: BulletDrawer
 ) {
     fun move(
         direction: ru.aa.shapkin.Tanchiki.enums.Direction,
