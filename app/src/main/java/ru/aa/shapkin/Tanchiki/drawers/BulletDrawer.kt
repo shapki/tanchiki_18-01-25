@@ -13,12 +13,17 @@ import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.models.Tank
 import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
 import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
+import ru.aa.shapkin.Tanchiki.utils.getTankByCoordinates
 import ru.aa.shapkin.Tanchiki.utils.runOnUiThread
 
 private const val BULLET_WIDTH = 15
 private const val BULLET_HEIGHT = 15
 
-class BulletDrawer(private val container: FrameLayout) {
+class BulletDrawer(
+    private val container: FrameLayout,
+    private val elements:MutableList<Element>,
+    val enemyDrawer: EnemyDrawer
+    ) {
     private var canBulletGoFurther = true
     private var bulletThread: Thread? = null
     private lateinit var tank: Tank
@@ -26,8 +31,7 @@ class BulletDrawer(private val container: FrameLayout) {
     private fun checkBulletThreadDlive() = bulletThread != null && bulletThread!!.isAlive
 
     fun makeBulletMove(
-        tank: Tank,
-        elementsOnContainer: MutableList<Element>
+        tank: Tank
     ) {
         canBulletGoFurther = true
         this.tank = tank
@@ -47,7 +51,6 @@ class BulletDrawer(private val container: FrameLayout) {
                     }
                     Thread.sleep(30)
                     chooseBehaviorInTermsOfDirections(
-                        elementsOnContainer,
                         currentDirection,
                         Coordinate(
                             (bullet.layoutParams as FrameLayout.LayoutParams).topMargin,
@@ -66,37 +69,37 @@ class BulletDrawer(private val container: FrameLayout) {
     }
 
     private fun chooseBehaviorInTermsOfDirections(
-        elementsOnContainer: MutableList<Element>,
         currentDirection: Direction,
         bulletCoordinate: Coordinate
     ) {
         when (currentDirection) {
             Direction.DOWN, Direction.UP -> {
-                compareCollections(elementsOnContainer, getCoordinatesForTopOrBottomDirection(bulletCoordinate))
+                compareCollections(getCoordinatesForTopOrBottomDirection(bulletCoordinate))
             }
 
             Direction.LEFT, Direction.RIGHT -> {
-                compareCollections(elementsOnContainer, getCoordinatesForLeftOrRightDirection(bulletCoordinate))
+                compareCollections(getCoordinatesForLeftOrRightDirection(bulletCoordinate))
             }
         }
     }
 
     private fun compareCollections(
-        elementsOnContainer: MutableList<Element>,
         detectedCoordinateList: List<Coordinate>
     ) {
         for (coordinate in detectedCoordinateList) {
-            val element = getElementByCoordinates(coordinate, elementsOnContainer)
+            var element = getElementByCoordinates(coordinate, elements)
+            if (element == null) {
+                element = getTankByCoordinates(coordinate, enemyDrawer.tanks)
+            }
             if (element == tank.element) {
                 continue
             }
-            removeElementsAndStopBullet(element, elementsOnContainer)
+            removeElementsAndStopBullet(element)
         }
     }
 
     private fun removeElementsAndStopBullet(
-        element: Element?,
-        elementsOnContainer: MutableList<Element>
+        element: Element?
     ) {
         if (element != null) {
             if (element.material.bulletCanGoThrough) {
@@ -109,11 +112,18 @@ class BulletDrawer(private val container: FrameLayout) {
             if (element.material.simpleBulletCanDestroy) {
                 stopBullet()
                 removeView(element)
-                elementsOnContainer.remove(element)
+                elements.remove(element)
+                removeTank(element)
             } else {
                 stopBullet()
             }
         }
+    }
+
+    private fun removeTank(element: Element) {
+        val tanksElements = enemyDrawer.tanks.map {it.element}
+        val tankIndex = tanksElements.indexOf(element)
+        enemyDrawer.removeTank(tankIndex)
     }
 
     private fun stopBullet() {
