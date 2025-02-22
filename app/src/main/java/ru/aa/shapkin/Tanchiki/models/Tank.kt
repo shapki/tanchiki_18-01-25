@@ -1,25 +1,23 @@
 package ru.aa.shapkin.Tanchiki.models
 
-import android.graphics.Path.Direction
 import android.view.View
 import android.widget.FrameLayout
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.binding
 import ru.aa.shapkin.Tanchiki.drawers.BulletDrawer
+import ru.aa.shapkin.Tanchiki.drawers.EnemyDrawer
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
 import ru.aa.shapkin.Tanchiki.enums.Direction.LEFT
 import ru.aa.shapkin.Tanchiki.enums.Direction.RIGHT
 import ru.aa.shapkin.Tanchiki.enums.Material
-import ru.aa.shapkin.Tanchiki.utils.checkViewCanMoveThroughBorder
-import ru.aa.shapkin.Tanchiki.utils.getElementByCoordinates
-import ru.aa.shapkin.Tanchiki.utils.runOnUiThread
+import ru.aa.shapkin.Tanchiki.utils.*
 import kotlin.random.Random
 
 class Tank constructor(
     val element: Element,
     var direction: ru.aa.shapkin.Tanchiki.enums.Direction,
-    val bulletDrawer: BulletDrawer
+    private val enemyDrawer: EnemyDrawer
 ) {
     fun move(
         direction: ru.aa.shapkin.Tanchiki.enums.Direction,
@@ -27,7 +25,7 @@ class Tank constructor(
         elementsOnContainer: List<Element>
     ) {
         val view = container.findViewById<View>(element.viewId) ?: return
-        val currentCoordinate = getTankCurrentCoordinate(view)
+        val currentCoordinate = view.getViewCoordinate()
         this.direction = direction
         view.rotation = direction.rotation
         val nextCoordinate = getTankNewCoordinate(view)
@@ -36,10 +34,20 @@ class Tank constructor(
         ) {
             emulateViewMoving(container, view)
             element.coordinate = nextCoordinate
+            generateRandomDirectionForEnemyTank()
         } else {
             element.coordinate = currentCoordinate
             (view.layoutParams as FrameLayout.LayoutParams).topMargin = currentCoordinate.top
             (view.layoutParams as FrameLayout.LayoutParams).leftMargin = currentCoordinate.left
+            changeDirectionForEnemyTank()
+        }
+    }
+
+    private fun generateRandomDirectionForEnemyTank() {
+        if (element.material != Material.ENEMY_TANK) {
+            return
+        }
+        if (checkIfChanceBiggerThanRandom(10)) {
             changeDirectionForEnemyTank()
         }
     }
@@ -58,13 +66,6 @@ class Tank constructor(
         }
     }
 
-    private fun getTankCurrentCoordinate(tank: View): Coordinate {
-        return Coordinate(
-            (tank.layoutParams as FrameLayout.LayoutParams).topMargin,
-            (tank.layoutParams as FrameLayout.LayoutParams).leftMargin
-        )
-    }
-
     private fun getTankNewCoordinate(view: View): Coordinate {
         val layoutParams = view.layoutParams as FrameLayout.LayoutParams
         when (direction) {
@@ -78,11 +79,11 @@ class Tank constructor(
             }
             LEFT -> {
                 view.rotation = 270f
-                (view.layoutParams as FrameLayout.LayoutParams).topMargin -= CELL_SIZE
+                (view.layoutParams as FrameLayout.LayoutParams).leftMargin -= CELL_SIZE
             }
             RIGHT -> {
                 view.rotation = 90f
-                (view.layoutParams as FrameLayout.LayoutParams).topMargin += CELL_SIZE
+                (view.layoutParams as FrameLayout.LayoutParams).leftMargin += CELL_SIZE
             }
         }
 
@@ -94,7 +95,10 @@ class Tank constructor(
         elementsOnContainer: List<Element>
     ): Boolean {
         for (anyCoordinate in getTankCoordinates(coordinate)) {
-            val element = getElementByCoordinates(anyCoordinate, elementsOnContainer)
+            var element = getElementByCoordinates(anyCoordinate, elementsOnContainer)
+            if (element == null) {
+                element = getTankByCoordinates(anyCoordinate, enemyDrawer.tanks)
+            }
             if (element != null && !element.material.tankCanGoThrough) {
                 if(this == element) {
                     continue

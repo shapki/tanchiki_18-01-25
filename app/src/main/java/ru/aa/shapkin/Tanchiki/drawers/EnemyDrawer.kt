@@ -6,9 +6,11 @@ import ru.aa.shapkin.Tanchiki.binding
 import ru.aa.shapkin.Tanchiki.enums.CELLS_TANKS_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
+import ru.aa.shapkin.Tanchiki.models.Bullet
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.models.Tank
+import ru.aa.shapkin.Tanchiki.utils.checkIfChanceBiggerThanRandom
 import ru.aa.shapkin.Tanchiki.utils.drawElement
 
 private const val MAX_ENEMY_AMOUNT = 20
@@ -20,7 +22,9 @@ class EnemyDrawer(
     private val respawnList: List<Coordinate>
     private var enemyAmount = 0
     private var currentCoordinate:Coordinate
-    private val tanks = mutableListOf<Tank>()
+    val tanks = mutableListOf<Tank>()
+    private var moveAllTanksThread: Thread? = null
+    lateinit var bulletDrawer: BulletDrawer
 
     init {
         respawnList = getRespawnList()
@@ -58,24 +62,31 @@ class EnemyDrawer(
                 material = Material.ENEMY_TANK,
                 coordinate = currentCoordinate
             ), Direction.DOWN,
-            BulletDrawer(container)
+            this
         )
         enemyTank.element.drawElement(container)
-        elements.add(enemyTank.element)
         tanks.add(enemyTank)
     }
 
     fun moveEnemyTanks() {
         Thread(Runnable {
             while (true) {
-                removeInconsistentTanks()
-                tanks.forEach{
-                    it.move(it.direction, container, elements)
-                    it.bulletDrawer.makeBulletMove(it, elements)
-                }
+                goThroughAllTanks()
                 Thread.sleep(400)
             }
         }).start()
+    }
+
+    private fun goThroughAllTanks() {
+        moveAllTanksThread = Thread(Runnable {
+            tanks.forEach {
+                it.move(it.direction, container, elements)
+                if (checkIfChanceBiggerThanRandom(10)) {
+                    bulletDrawer.addNewBulletForTank(it)
+                }
+            }
+        })
+        moveAllTanksThread?.start()
     }
 
     fun startEnemyCreation() {
@@ -88,18 +99,9 @@ class EnemyDrawer(
         }).start()
     }
 
-    private fun removeInconsistentTanks() {
-        tanks.removeAll(getInconsistentTanks())
-    }
-
-    private fun getInconsistentTanks(): List<Tank> {
-        val removingTanks = mutableListOf<Tank>()
-        val allTanksElements = elements.filter { it.material == Material.ENEMY_TANK }
-        tanks.forEach {
-            if (!allTanksElements.contains(it.element)) {
-                removingTanks.add(it)
-            }
-        }
-        return removingTanks
+    fun removeTank(tankIndex: Int) {
+        if (tankIndex < 0) return
+        moveAllTanksThread?.join()
+        tanks.removeAt(tankIndex)
     }
 }
