@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
+import ru.aa.shapkin.Tanchiki.GameCore.isPlaying
 import ru.aa.shapkin.Tanchiki.R
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
@@ -40,6 +41,9 @@ class BulletDrawer(
     private fun moveAllBullets() {
         Thread(Runnable {
             while(true) {
+                if (!isPlaying()) {
+                    continue
+                }
                 interactWithAllBullets()
                 Thread.sleep(30)
             }
