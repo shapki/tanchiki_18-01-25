@@ -26,12 +26,13 @@ import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.models.Tank
 import ru.aa.shapkin.Tanchiki.sounds.MainSoundPlayer
+import ru.aa.shapkin.Tanchiki.utils.ProgressIndicator
 
 const val CELL_SIZE = 50
 
 lateinit var binding: ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ProgressIndicator {
     private var editMode = false
     private lateinit var item: MenuItem
 
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val soundManager by lazy {
-        MainSoundPlayer(this)
+        MainSoundPlayer(this, this)
     }
 
     private fun createTank(elementWidth: Int, elementHeight: Int): Tank {
@@ -259,5 +260,17 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun showProgress() {
+        binding.container.visibility = INVISIBLE
+        binding.totalContainer.setBackgroundResource(R.color.gray)
+        binding.initTitle.visibility = VISIBLE
+    }
+
+    override fun dismissProgress() {
+        binding.container.visibility = VISIBLE
+        binding.totalContainer.setBackgroundResource(R.color.black)
+        binding.initTitle.visibility = GONE
     }
 }

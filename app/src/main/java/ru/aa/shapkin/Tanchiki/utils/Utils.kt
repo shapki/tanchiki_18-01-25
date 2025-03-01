@@ -40,7 +40,7 @@ fun getElementByCoordinates(
     return null
 }
 
-fun getTankByCoordinates(coordinate: Coordinate, tankList: List<Tank>): Element? {
+fun getTankByCoordinates(coordinate: Coordinate, tankList: MutableList<Tank>): Element? {
     return getElementByCoordinates(coordinate, tankList.map {it.element})
 }
 
