@@ -1,8 +1,8 @@
 package ru.aa.shapkin.Tanchiki.drawers
 
 import android.widget.FrameLayout
-import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.GameCore
+import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.sounds.MainSoundPlayer
 import ru.aa.shapkin.Tanchiki.enums.CELLS_TANKS_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Direction
@@ -114,7 +114,16 @@ class EnemyDrawer(
         moveEnemyTanks()
     }
 
+    private fun isAllTanksDestroyed(): Boolean {
+        return enemyAmount == MAX_ENEMY_AMOUNT && tanks.toList().isEmpty()
+    }
+
+    private fun getPlayerScore() = enemyAmount * 100
+
     fun removeTank(tankIndex: Int) {
         tanks.removeAt(tankIndex)
+        if (isAllTanksDestroyed()) {
+            gameCore.playerWon(getPlayerScore())
+        }
     }
 }
