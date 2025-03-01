@@ -4,9 +4,9 @@ import android.app.Activity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.GameCore
 import ru.aa.shapkin.Tanchiki.R
-import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.sounds.MainSoundPlayer
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
@@ -164,7 +164,7 @@ class BulletDrawer(
 
     private fun stopGameIfNecessary(element: Element) {
         if (element.material == Material.PLAYER_TANK || element.material == Material.EAGLE) {
-            gameCore.destroyPlayerOrBase()
+            gameCore.destroyPlayerOrBase(enemyDrawer.getPlayerScore())
         }
     }
 

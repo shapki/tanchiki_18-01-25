@@ -2,7 +2,7 @@ package ru.aa.shapkin.Tanchiki.drawers
 
 import android.view.View
 import android.widget.FrameLayout
-import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
+import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Material
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
