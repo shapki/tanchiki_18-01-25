@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        SoundManager.context = this
+
         supportActionBar?.title = "Menu"
 
         binding.editorClear.setOnClickListener { elementsDrawer.currentMaterial = Material.EMPTY }
@@ -192,6 +194,7 @@ class MainActivity : AppCompatActivity() {
     private fun pauseTheGame() {
         item.icon = ContextCompat.getDrawable(this, R.drawable.ic_play)
         GameCore.pauseTheGame()
+        SoundManager.pauseSounds()
     }
 
     override fun onPause() {
@@ -202,23 +205,25 @@ class MainActivity : AppCompatActivity() {
     private fun startTheGame() {
         item.icon = ContextCompat.getDrawable(this, R.drawable.ic_pause)
         enemyDrawer.startEnemyCreation()
+        SoundManager.playIntroMusic()
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (!isPlaying()) {
-            return super.onKeyDown(keyCode, event)
-        }
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         when (keyCode) {
-            KEYCODE_DPAD_UP -> move(UP)
-            KEYCODE_DPAD_DOWN -> move(DOWN)
-            KEYCODE_DPAD_LEFT -> move(LEFT)
-            KEYCODE_DPAD_RIGHT -> move(RIGHT)
-            KEYCODE_SPACE -> bulletDrawer.addNewBulletForTank(playerTank)
+            KEYCODE_DPAD_UP, KEYCODE_DPAD_LEFT,
+                KEYCODE_DPAD_DOWN, KEYCODE_DPAD_RIGHT -> onButtonReleased()
         }
-        return super.onKeyDown(keyCode, event)
+        return super.onKeyUp(keyCode, event)
     }
 
-    private fun move(direction: Direction) {
+    private fun onButtonPresed(direction: Direction) {
+        SoundManager.tankMove()
         playerTank.move(direction, binding.container, elementsDrawer.elementsOnContainer)
+    }
+
+    fun onButtonReleased() {
+        if (enemyDrawer.tanks.isEmpty()) {
+            SoundManager.tankStop()
+        }
     }
 }

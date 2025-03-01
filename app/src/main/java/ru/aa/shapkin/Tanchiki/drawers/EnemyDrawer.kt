@@ -3,6 +3,7 @@ package ru.aa.shapkin.Tanchiki.drawers
 import android.widget.FrameLayout
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.GameCore.isPlaying
+import ru.aa.shapkin.Tanchiki.SoundManager
 import ru.aa.shapkin.Tanchiki.binding
 import ru.aa.shapkin.Tanchiki.enums.CELLS_TANKS_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Direction
@@ -82,6 +83,11 @@ class EnemyDrawer(
     }
 
     private fun goThroughAllTanks() {
+        if (tanks.isNotEmpty()) {
+            SoundManager.tankMove()
+        } else {
+            SoundManager.tankStop()
+        }
         tanks.toList().forEach {
             it.move(it.direction, container, elements)
             if (checkIfChanceBiggerThanRandom(10)) {
@@ -109,7 +115,6 @@ class EnemyDrawer(
     }
 
     fun removeTank(tankIndex: Int) {
-        if (tankIndex < 0) return
         tanks.removeAt(tankIndex)
     }
 }
