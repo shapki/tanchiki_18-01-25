@@ -11,9 +11,6 @@ import android.view.MenuItem
 import android.view.View.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.core.content.ContextCompat
-import ru.aa.shapkin.Tanchiki.GameCore
-import ru.aa.shapkin.Tanchiki.LevelStorage
-import ru.aa.shapkin.Tanchiki.R
 import ru.aa.shapkin.Tanchiki.activities.SCORE_REQUEST_CODE
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
