@@ -5,7 +5,7 @@ import android.content.Context
 import android.media.MediaPlayer
 
 @SuppressLint("StaticFieldLeak")
-object SoundManager {
+class SoundManager(context: Context) {
     private lateinit var bulletBurstPlayer: MediaPlayer
     private lateinit var bulletShotPlayer: MediaPlayer
     private lateinit var introMusicPlayer: MediaPlayer
@@ -13,17 +13,11 @@ object SoundManager {
     private lateinit var tankMovePlayerSecond: MediaPlayer
     private var isIntroFinished = false
 
-    var context: Context? = null
-    set(value) {
-        bulletBurstPlayer = MediaPlayer.create(value, R.raw.bullet_burst)
-        bulletShotPlayer = MediaPlayer.create(value, R.raw.bullet_shot)
-        introMusicPlayer = MediaPlayer.create(value, R.raw.tanks_pre_music)
-        prepareGapLessTankMoveSound(value!!)
+    init {
+        prepareGapLessTankMoveSound()
     }
 
-    private fun prepareGapLessTankMoveSound(context: Context) {
-        tankMovePlayerSecond = MediaPlayer.create(context, R.raw.tank_move_long)
-        tankMovePlayerFirst = MediaPlayer.create(context, R.raw.tank_move_long)
+    private fun prepareGapLessTankMoveSound() {
         tankMovePlayerFirst.isLooping = true
         tankMovePlayerSecond.isLooping = true
         tankMovePlayerFirst.setNextMediaPlayer(tankMovePlayerSecond)
