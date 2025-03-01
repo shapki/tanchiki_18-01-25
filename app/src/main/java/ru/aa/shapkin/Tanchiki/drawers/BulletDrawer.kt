@@ -7,7 +7,7 @@ import android.widget.ImageView
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.GameCore
 import ru.aa.shapkin.Tanchiki.R
-import ru.aa.shapkin.Tanchiki.SoundManager
+import ru.aa.shapkin.Tanchiki.sounds.MainSoundPlayer
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
 import ru.aa.shapkin.Tanchiki.models.Bullet
@@ -23,7 +23,7 @@ class BulletDrawer(
     private val container: FrameLayout,
     private val elements:MutableList<Element>,
     private val enemyDrawer: EnemyDrawer,
-    private val soundManager: SoundManager,
+    private val soundManager: MainSoundPlayer,
     private val gameCore: GameCore
 ) {
     init {

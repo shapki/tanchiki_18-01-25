@@ -3,12 +3,10 @@ package ru.aa.shapkin.Tanchiki.drawers
 import android.widget.FrameLayout
 import ru.aa.shapkin.Tanchiki.CELL_SIZE
 import ru.aa.shapkin.Tanchiki.GameCore
-import ru.aa.shapkin.Tanchiki.SoundManager
-import ru.aa.shapkin.Tanchiki.binding
+import ru.aa.shapkin.Tanchiki.sounds.MainSoundPlayer
 import ru.aa.shapkin.Tanchiki.enums.CELLS_TANKS_SIZE
 import ru.aa.shapkin.Tanchiki.enums.Direction
 import ru.aa.shapkin.Tanchiki.enums.Material
-import ru.aa.shapkin.Tanchiki.models.Bullet
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.models.Tank
@@ -20,7 +18,7 @@ private const val MAX_ENEMY_AMOUNT = 20
 class EnemyDrawer(
     private val container: FrameLayout,
     private val elements: MutableList<Element>,
-    private val soundManager: SoundManager,
+    private val soundManager: MainSoundPlayer,
     private val gameCore: GameCore
     ) {
     private val respawnList: List<Coordinate>
