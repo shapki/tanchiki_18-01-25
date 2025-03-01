@@ -4,8 +4,8 @@ import android.app.Activity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import ru.aa.shapkin.Tanchiki.CELL_SIZE
-import ru.aa.shapkin.Tanchiki.binding
+import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
+import ru.aa.shapkin.Tanchiki.activities.binding
 import ru.aa.shapkin.Tanchiki.models.Coordinate
 import ru.aa.shapkin.Tanchiki.models.Element
 import ru.aa.shapkin.Tanchiki.models.Tank

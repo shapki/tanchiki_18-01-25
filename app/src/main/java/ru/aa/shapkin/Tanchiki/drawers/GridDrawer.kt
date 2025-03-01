@@ -4,8 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.FrameLayout
-import ru.aa.shapkin.Tanchiki.CELL_SIZE
-import ru.aa.shapkin.Tanchiki.binding
+import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
 
 class GridDrawer (private val container: FrameLayout?) {
     private val allLines = mutableListOf<View>()

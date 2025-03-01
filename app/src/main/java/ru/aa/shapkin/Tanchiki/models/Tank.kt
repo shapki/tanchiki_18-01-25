@@ -2,9 +2,8 @@ package ru.aa.shapkin.Tanchiki.models
 
 import android.view.View
 import android.widget.FrameLayout
-import ru.aa.shapkin.Tanchiki.CELL_SIZE
-import ru.aa.shapkin.Tanchiki.binding
-import ru.aa.shapkin.Tanchiki.drawers.BulletDrawer
+import ru.aa.shapkin.Tanchiki.activities.CELL_SIZE
+import ru.aa.shapkin.Tanchiki.activities.binding
 import ru.aa.shapkin.Tanchiki.drawers.EnemyDrawer
 import ru.aa.shapkin.Tanchiki.enums.Direction.UP
 import ru.aa.shapkin.Tanchiki.enums.Direction.DOWN
